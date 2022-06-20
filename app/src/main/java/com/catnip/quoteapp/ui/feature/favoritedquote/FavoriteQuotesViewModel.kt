@@ -22,9 +22,9 @@ class FavoriteQuotesViewModel(
 
     val quoteResult = MutableLiveData<ViewResource<List<Quote>>>()
 
-    val addFavoriteResult = MutableLiveData<ViewResource<Number?>>()
+    val addFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
 
-    val removeFavoriteResult = MutableLiveData<ViewResource<Number?>>()
+    val removeFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
 
     fun getRandomQuote() {
         viewModelScope.launch {

@@ -22,9 +22,13 @@ class QuotePreviewViewModel(
 
     val quoteResult = MutableLiveData<ViewResource<Quote>>()
 
-    val addFavoriteResult = MutableLiveData<ViewResource<Number?>>()
+    val addFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
 
-    val removeFavoriteResult = MutableLiveData<ViewResource<Number?>>()
+    val removeFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
+
+    var cardColor = "#546E7A"
+
+    var currentQuote : Quote? = null
 
     fun getRandomQuote() {
         viewModelScope.launch {

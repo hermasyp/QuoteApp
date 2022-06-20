@@ -1,6 +1,8 @@
 package com.catnip.quoteapp.domain
 
+import android.view.View
 import com.catnip.quoteapp.base.arch.BaseUseCase
+import com.catnip.quoteapp.base.exception.DatabaseExecutionFailedException
 import com.catnip.quoteapp.base.wrapper.DataResource
 import com.catnip.quoteapp.base.wrapper.ViewResource
 import com.catnip.quoteapp.data.repository.QuoteRepository
@@ -18,13 +20,13 @@ Github : https://github.com/hermasyp
 class DeleteFavoriteQuoteUseCase(
     val repository: QuoteRepository,
     val dispatcher: CoroutineDispatcher
-) : BaseUseCase<Quote, Number?>(dispatcher) {
+) : BaseUseCase<Quote, Quote?>(dispatcher) {
 
-    override suspend fun execute(param: Quote?): Flow<ViewResource<Number?>> {
+    override suspend fun execute(param: Quote?): Flow<ViewResource<Quote?>> {
         return repository.deleteFavoriteQuote(dispatcher, param.toEntity()).map {
             when (it) {
                 is DataResource.Success -> {
-                    ViewResource.Success(it.data)
+                    ViewResource.Success(param?.apply { isFavorite = false })
                 }
                 is DataResource.Loading -> {
                     ViewResource.Loading()

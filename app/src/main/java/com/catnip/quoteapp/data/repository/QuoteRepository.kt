@@ -2,6 +2,7 @@ package com.catnip.quoteapp.data.repository
 
 import com.catnip.quoteapp.base.arch.BaseContract
 import com.catnip.quoteapp.base.arch.BaseRepositoryImpl
+import com.catnip.quoteapp.base.exception.DatabaseExecutionFailedException
 import com.catnip.quoteapp.base.wrapper.DataResource
 import com.catnip.quoteapp.data.local.datasource.QuoteLocalDataSource
 import com.catnip.quoteapp.data.local.entity.QuoteEntity
@@ -39,10 +40,24 @@ class QuoteRepositoryImpl(
     ): Flow<DataResource<Long>> =
         flow {
             emit(DataResource.Loading())
-            emit(proceed { localDataSource.addFavorite(entity) })
+            emit(
+                try {
+                    val totalRowsAffected = localDataSource.addFavorite(entity)
+                    if (totalRowsAffected > 0) {
+                        DataResource.Success(totalRowsAffected)
+                    } else {
+                        DataResource.Error(DatabaseExecutionFailedException())
+                    }
+                } catch (exception: Exception) {
+                    DataResource.Error(exception)
+                }
+            )
         }.flowOn(dispatcher)
 
-    override suspend fun getFavoriteQuotesById(dispatcher: CoroutineDispatcher,id: String?): Flow<DataResource<QuoteEntity?>> =
+    override suspend fun getFavoriteQuotesById(
+        dispatcher: CoroutineDispatcher,
+        id: String?
+    ): Flow<DataResource<QuoteEntity?>> =
         flow {
             emit(proceed { localDataSource.getFavoriteQuotesById(id) })
         }.flowOn(dispatcher)
@@ -53,9 +68,19 @@ class QuoteRepositoryImpl(
     ): Flow<DataResource<Int>> =
         flow {
             emit(DataResource.Loading())
-            emit(proceed { localDataSource.deleteFavorite(entity) })
+            emit(
+                try {
+                    val totalRowsAffected = localDataSource.deleteFavorite(entity)
+                    if (totalRowsAffected > 0) {
+                        DataResource.Success(totalRowsAffected)
+                    } else {
+                        DataResource.Error(DatabaseExecutionFailedException())
+                    }
+                } catch (exception: Exception) {
+                    DataResource.Error(exception)
+                }
+            )
         }.flowOn(dispatcher)
-
 
 }
 
@@ -67,7 +92,10 @@ interface QuoteRepository : BaseContract.BaseRepository {
         entity: QuoteEntity
     ): Flow<DataResource<Long>>
 
-    suspend fun getFavoriteQuotesById(dispatcher: CoroutineDispatcher,id: String?): Flow<DataResource<QuoteEntity?>>
+    suspend fun getFavoriteQuotesById(
+        dispatcher: CoroutineDispatcher,
+        id: String?
+    ): Flow<DataResource<QuoteEntity?>>
 
     fun deleteFavoriteQuote(
         dispatcher: CoroutineDispatcher,

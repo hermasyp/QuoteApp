@@ -5,4 +5,5 @@
     <string name="another_quotes">Another Quotes</string>
     <string name="favorite_quotes">Set as a Favorite</string>
     <string name="change_color">Change Color</string>
+    <string name="text_color_picker_title">Choose Card Color</string>
 </resources>

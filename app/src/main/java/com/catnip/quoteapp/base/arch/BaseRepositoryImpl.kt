@@ -49,9 +49,9 @@ open class BaseRepositoryImpl : BaseContract.BaseRepository {
         }
     }
 
-    suspend fun <T> proceed(apiCall: suspend () -> T): DataResource<T> {
+    suspend fun <T> proceed(coroutine: suspend () -> T): DataResource<T> {
         return try {
-            DataResource.Success(apiCall.invoke())
+            DataResource.Success(coroutine.invoke())
         } catch (exception: Exception) {
             DataResource.Error(exception)
         }

@@ -21,6 +21,7 @@
             android:name=".ui.feature.favoritedquote.FavoriteQuotesActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.QuoteApp.NoToolbar"
             android:name=".ui.feature.quotepreview.QuotePreviewActivity"
             android:exported="true">
             <intent-filter>

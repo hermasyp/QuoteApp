@@ -26,6 +26,8 @@
         <item name="android:textColorTertiary">@color/text_color_disabled</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
 
+        <item name="fontFamily">@font/app_font</item>
+
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
