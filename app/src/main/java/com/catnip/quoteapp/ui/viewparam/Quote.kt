@@ -16,6 +16,7 @@ data class Quote(
     val dateModified: String,
     val id: String,
     val length: Int,
+    var isFavorite: Boolean = false
 )
 
 fun Quote?.toEntity() = QuoteEntity(

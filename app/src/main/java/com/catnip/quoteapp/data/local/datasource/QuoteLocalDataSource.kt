@@ -5,6 +5,9 @@ import com.catnip.quoteapp.data.local.entity.QuoteEntity
 
 class QuoteLocalDataSourceImpl(val quotesDao: QuotesDao) : QuoteLocalDataSource {
     override suspend fun getFavoriteQuotes(): List<QuoteEntity> = quotesDao.getFavoriteQuotes()
+
+    override suspend fun getFavoriteQuotesById(id: String?): QuoteEntity? = quotesDao.getFavoriteQuotesByID(id)
+
     override suspend fun addFavorite(quoteEntity: QuoteEntity): Long =
         quotesDao.addFavoriteQuote(quoteEntity)
 
@@ -14,6 +17,7 @@ class QuoteLocalDataSourceImpl(val quotesDao: QuotesDao) : QuoteLocalDataSource 
 
 interface QuoteLocalDataSource {
     suspend fun getFavoriteQuotes(): List<QuoteEntity>
+    suspend fun getFavoriteQuotesById(id : String?): QuoteEntity?
     suspend fun addFavorite(quoteEntity: QuoteEntity): Long
     suspend fun deleteFavorite(quoteEntity: QuoteEntity): Int
 }

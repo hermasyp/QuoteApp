@@ -12,6 +12,9 @@ interface QuotesDao {
     @Query("SELECT * FROM quotes")
     suspend fun getFavoriteQuotes(): List<QuoteEntity>
 
+    @Query("SELECT * FROM quotes WHERE id == :id LIMIT 1")
+    suspend fun getFavoriteQuotesByID(id : String?): QuoteEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteQuote(note: QuoteEntity): Long
 

@@ -7,8 +7,8 @@ import com.catnip.quoteapp.data.repository.QuoteRepository
 import com.catnip.quoteapp.ui.viewparam.Quote
 import com.catnip.quoteapp.ui.viewparam.mapToViewParam
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -20,16 +20,30 @@ class GetRandomQuoteUseCase(
 ) : BaseUseCase<Any, Quote>(dispatcher) {
 
     override suspend fun execute(param: Any?): Flow<ViewResource<Quote>> {
-        return repository.getRandomQuote(dispatcher).map {
-            when (it) {
+        return repository.getRandomQuote(dispatcher).map { resultNetwork ->
+            when (resultNetwork) {
                 is DataResource.Success -> {
-                    ViewResource.Success(it.data.mapToViewParam())
+                    repository.getFavoriteQuotesById(dispatcher, resultNetwork.data?.id)
+                        .map { favResult ->
+                            when (favResult) {
+                                is DataResource.Success -> {
+                                    if (favResult.data != null) {
+                                        ViewResource.Success(resultNetwork.data.mapToViewParam().apply { isFavorite = true })
+                                    } else {
+                                        ViewResource.Success(resultNetwork.data.mapToViewParam())
+                                    }
+                                }
+                                else -> {
+                                    ViewResource.Error(favResult.exception)
+                                }
+                            }
+                        }.last()
                 }
                 is DataResource.Loading -> {
                     ViewResource.Loading()
                 }
                 is DataResource.Error -> {
-                    ViewResource.Error(it.exception)
+                    ViewResource.Error(resultNetwork.exception)
                 }
             }
         }

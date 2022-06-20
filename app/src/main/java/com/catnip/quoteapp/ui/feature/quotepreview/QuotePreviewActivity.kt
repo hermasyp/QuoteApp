@@ -68,6 +68,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
     override fun <T> showData(data: T) {
         if (data is Quote) {
             this.quote = data
+            if(data.isFavorite) Toast.makeText(this, "FAVORITED", Toast.LENGTH_SHORT).show()
             binding.tvQuotesText.text = data.content
             binding.tvAuthor.text = data.author
         }

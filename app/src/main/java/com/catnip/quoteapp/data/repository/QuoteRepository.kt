@@ -42,6 +42,11 @@ class QuoteRepositoryImpl(
             emit(proceed { localDataSource.addFavorite(entity) })
         }.flowOn(dispatcher)
 
+    override suspend fun getFavoriteQuotesById(dispatcher: CoroutineDispatcher,id: String?): Flow<DataResource<QuoteEntity?>> =
+        flow {
+            emit(proceed { localDataSource.getFavoriteQuotesById(id) })
+        }.flowOn(dispatcher)
+
     override fun deleteFavoriteQuote(
         dispatcher: CoroutineDispatcher,
         entity: QuoteEntity
@@ -61,6 +66,8 @@ interface QuoteRepository : BaseContract.BaseRepository {
         dispatcher: CoroutineDispatcher,
         entity: QuoteEntity
     ): Flow<DataResource<Long>>
+
+    suspend fun getFavoriteQuotesById(dispatcher: CoroutineDispatcher,id: String?): Flow<DataResource<QuoteEntity?>>
 
     fun deleteFavoriteQuote(
         dispatcher: CoroutineDispatcher,
