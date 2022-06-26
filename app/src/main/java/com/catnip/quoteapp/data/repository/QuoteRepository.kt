@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -24,13 +25,11 @@ class QuoteRepositoryImpl(
 
     override fun getRandomQuote(dispatcher: CoroutineDispatcher): Flow<DataResource<QuoteResponse>> =
         flow {
-            emit(DataResource.Loading())
             emit(safeNetworkCall { networkDataSource.getRandomQuote() })
         }.flowOn(dispatcher)
 
     override fun getFavoriteQuotes(dispatcher: CoroutineDispatcher): Flow<DataResource<List<QuoteEntity>>> =
         flow {
-            emit(DataResource.Loading())
             emit(proceed { localDataSource.getFavoriteQuotes() })
         }.flowOn(dispatcher)
 
@@ -39,7 +38,6 @@ class QuoteRepositoryImpl(
         entity: QuoteEntity
     ): Flow<DataResource<Long>> =
         flow {
-            emit(DataResource.Loading())
             emit(
                 try {
                     val totalRowsAffected = localDataSource.addFavorite(entity)
@@ -67,7 +65,6 @@ class QuoteRepositoryImpl(
         entity: QuoteEntity
     ): Flow<DataResource<Int>> =
         flow {
-            emit(DataResource.Loading())
             emit(
                 try {
                     val totalRowsAffected = localDataSource.deleteFavorite(entity)
@@ -80,7 +77,8 @@ class QuoteRepositoryImpl(
                     DataResource.Error(exception)
                 }
             )
-        }.flowOn(dispatcher)
+        }
+            .flowOn(dispatcher)
 
 }
 

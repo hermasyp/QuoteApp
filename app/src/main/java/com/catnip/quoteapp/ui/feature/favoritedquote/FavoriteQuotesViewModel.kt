@@ -8,6 +8,7 @@ import com.catnip.quoteapp.domain.AddFavoriteQuoteUseCase
 import com.catnip.quoteapp.domain.DeleteFavoriteQuoteUseCase
 import com.catnip.quoteapp.domain.GetFavoriteQuotesUseCase
 import com.catnip.quoteapp.ui.viewparam.Quote
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -16,35 +17,25 @@ Github : https://github.com/hermasyp
  **/
 class FavoriteQuotesViewModel(
     val getFavoriteQuotesUseCase: GetFavoriteQuotesUseCase,
-    val addFavoriteQuoteUseCase: AddFavoriteQuoteUseCase,
     val deleteFavoriteQuoteUseCase: DeleteFavoriteQuoteUseCase
 ) : ViewModel() {
 
-    val quoteResult = MutableLiveData<ViewResource<List<Quote>>>()
+    val quoteResult = MutableLiveData<ViewResource<MutableList<Quote>>>()
 
-    val addFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
+    val removeFavoriteResult = MutableLiveData<ViewResource<Pair<Quote?, Int>>>()
 
-    val removeFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
-
-    fun getRandomQuote() {
+    fun getFavoriteQuotes() {
         viewModelScope.launch {
             getFavoriteQuotesUseCase().collect {
+                delay(300)
                 quoteResult.value = it
             }
         }
     }
 
-    fun addFavoriteQuote(quote: Quote) {
+    fun deleteFavoriteQuote(quote: Quote, position: Int) {
         viewModelScope.launch {
-            addFavoriteQuoteUseCase(quote).collect {
-                addFavoriteResult.value = it
-            }
-        }
-    }
-
-    fun deleteFavoriteQuote(quote: Quote) {
-        viewModelScope.launch {
-            deleteFavoriteQuoteUseCase(quote).collect {
+            deleteFavoriteQuoteUseCase(DeleteFavoriteQuoteUseCase.Param(quote,position)).collect {
                 removeFavoriteResult.value = it
             }
         }

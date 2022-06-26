@@ -24,7 +24,7 @@ class QuotePreviewViewModel(
 
     val addFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
 
-    val removeFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
+    val removeFavoriteResult = MutableLiveData<ViewResource<Pair<Quote?,Int>>>()
 
     var cardColor = "#546E7A"
 
@@ -48,7 +48,7 @@ class QuotePreviewViewModel(
 
     fun deleteFavoriteQuote(quote: Quote) {
         viewModelScope.launch {
-            deleteFavoriteQuoteUseCase(quote).collect {
+            deleteFavoriteQuoteUseCase(DeleteFavoriteQuoteUseCase.Param(quote,0)).collect {
                 removeFavoriteResult.value = it
             }
         }

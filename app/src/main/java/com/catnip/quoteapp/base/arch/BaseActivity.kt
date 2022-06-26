@@ -1,8 +1,7 @@
-package com.catnip.coingeckoapp.base.arch
+package com.catnip.quoteapp.base.arch
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,7 @@ import com.catnip.quoteapp.R
 import com.catnip.quoteapp.base.exception.ApiErrorException
 import com.catnip.quoteapp.base.exception.NoInternetConnectionException
 import com.catnip.quoteapp.base.wrapper.ViewResource
-import com.catnip.quoteapp.base.arch.BaseContract
+import com.catnip.quoteapp.utils.LogUtils
 import java.lang.Exception
 
 /**
@@ -76,37 +75,22 @@ abstract class BaseActivity<B : ViewBinding, VM : ViewModel>(
         }
     }
 
-    override fun handleData(viewResource: ViewResource<*>?) {
-        viewResource?.let {
+    override fun <T : ViewResource<*>> handleData(viewResource: T) {
+        viewResource.let {
+            resetView()
             when (viewResource) {
-                is ViewResource.Success -> {
+                is ViewResource.Success<*> -> {
                     showContent(true).also {
-                        showEmptyData(false)
                         showData(viewResource.data)
                     }
-                    showLoading(false)
-                    showError(false)
                 }
-                is ViewResource.Empty -> {
-                    showContent(false).also {
-                        showEmptyData(true)
-                    }
-                    showLoading(false)
-                    showError(false)
+                is ViewResource.Empty<*> -> {
+                    showEmptyData(true)
                 }
-                is ViewResource.Loading -> {
-                    showContent(false).also {
-                        showEmptyData(false)
-                    }
+                is ViewResource.Loading<*> -> {
                     showLoading(true)
-                    showError(false)
-
                 }
-                is ViewResource.Error -> {
-                    showContent(false).also {
-                        showEmptyData(false)
-                    }
-                    showLoading(false)
+                is ViewResource.Error<*> -> {
                     showError(true, viewResource.exception)
                 }
             }
@@ -114,11 +98,20 @@ abstract class BaseActivity<B : ViewBinding, VM : ViewModel>(
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
+    private fun resetView() {
+        showContent(false)
+        showLoading(false)
+        showError(false)
+        showEmptyData(false)
+    }
+
+    fun enableHomeAsBack() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
 }

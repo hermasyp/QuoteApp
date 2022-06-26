@@ -11,6 +11,7 @@ import com.catnip.quoteapp.ui.viewparam.toEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -27,13 +28,12 @@ class AddFavoriteQuoteUseCase(
                 is DataResource.Success -> {
                     ViewResource.Success(param?.apply { isFavorite = true })
                 }
-                is DataResource.Loading -> {
-                    ViewResource.Loading()
-                }
+
                 is DataResource.Error -> {
                     ViewResource.Error(it.exception)
                 }
             }
-        }
+        }.onStart { emit(ViewResource.Loading()) }
+
     }
 }

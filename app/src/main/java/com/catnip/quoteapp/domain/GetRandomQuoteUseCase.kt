@@ -39,13 +39,10 @@ class GetRandomQuoteUseCase(
                             }
                         }.last()
                 }
-                is DataResource.Loading -> {
-                    ViewResource.Loading()
-                }
                 is DataResource.Error -> {
                     ViewResource.Error(resultNetwork.exception)
                 }
             }
-        }
+        }.onStart { emit(ViewResource.Loading()) }
     }
 }

@@ -14,7 +14,7 @@ interface BaseContract {
         fun showEmptyData(isEmpty: Boolean)
         fun showLoading(isShowLoading: Boolean)
         fun showError(isErrorEnabled: Boolean, exception: Exception? = null)
-        fun handleData(viewResource: ViewResource<*>?)
+        fun <T : ViewResource<*>> handleData(viewResource : T)
         fun <T> showData(data: T)
     }
 

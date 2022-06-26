@@ -8,17 +8,29 @@
 
 
     <TextView
-        android:text="@string/app_name"
-        android:textSize="24sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
         android:id="@+id/tv_title_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_favorite_list"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_favourite_list"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title_app"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_quote_container"
@@ -78,13 +90,14 @@
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/btn_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:id="@+id/btn_container"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <ImageView
             android:id="@+id/btn_refresh_quotes"
             android:layout_width="@dimen/button_circle_size"
@@ -93,7 +106,7 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/bg_circle_button"
             android:padding="8dp"
-            android:src="@drawable/ic_refresh_quote"/>
+            android:src="@drawable/ic_refresh_quote" />
 
         <ImageView
             android:id="@+id/btn_favorite_quotes"
@@ -103,7 +116,7 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/bg_circle_button"
             android:padding="8dp"
-            android:src="@drawable/ic_favorite_false"/>
+            android:src="@drawable/ic_favorite_false" />
 
         <FrameLayout
             android:id="@+id/btn_change_quotes_color"
@@ -112,11 +125,12 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@drawable/bg_circle_button">
+
             <ImageView
-                android:layout_gravity="center"
                 android:id="@+id/iv_color_preview"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 tools:background="@color/white" />
         </FrameLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>

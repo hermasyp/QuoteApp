@@ -18,6 +18,7 @@
         android:theme="@style/Theme.QuoteApp"
         tools:targetApi="31">
         <activity
+            android:label="@string/title_favorite_page"
             android:name=".ui.feature.favoritedquote.FavoriteQuotesActivity"
             android:exported="false" />
         <activity

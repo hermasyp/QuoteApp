@@ -62,7 +62,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
 
-
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -89,6 +88,10 @@ dependencies {
 
     //color picker
     implementation 'com.github.Dhaval2404:ColorPicker:2.3'
+
+    //ui
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
+
 
 
 }

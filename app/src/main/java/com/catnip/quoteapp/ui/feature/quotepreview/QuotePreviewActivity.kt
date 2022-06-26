@@ -1,17 +1,17 @@
 package com.catnip.quoteapp.ui.feature.quotepreview
 
-import android.graphics.Color
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
+import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.catnip.coingeckoapp.base.arch.BaseActivity
+import com.catnip.quoteapp.base.arch.BaseActivity
 import com.catnip.quoteapp.R
 import com.catnip.quoteapp.base.wrapper.ViewResource
 import com.catnip.quoteapp.databinding.ActivityQuotePreviewBinding
+import com.catnip.quoteapp.ui.feature.favoritedquote.FavoriteQuotesActivity
 import com.catnip.quoteapp.ui.viewparam.Quote
-import com.catnip.quoteapp.utils.LogUtils
 import com.catnip.quoteapp.utils.createCircleBackground
 import com.catnip.quoteapp.utils.createRoundedBackground
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
@@ -25,12 +25,20 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
 
     override val viewModel: QuotePreviewViewModel by viewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        enableHomeAsBack()
+        super.onCreate(savedInstanceState)
+    }
     override fun initView() {
+        enableHomeAsBack()
         setClickListeners()
         viewModel.getRandomQuote()
     }
 
     private fun setClickListeners() {
+        binding.ivFavoriteList.setOnClickListener {
+            startActivity(Intent(this,FavoriteQuotesActivity::class.java))
+        }
         binding.btnRefreshQuotes.setOnClickListener { viewModel.getRandomQuote() }
         binding.btnFavoriteQuotes.setOnClickListener {
             viewModel.currentQuote?.let { quote ->
