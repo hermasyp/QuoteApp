@@ -8,11 +8,9 @@ import com.catnip.quoteapp.data.local.datasource.QuoteLocalDataSource
 import com.catnip.quoteapp.data.local.entity.QuoteEntity
 import com.catnip.quoteapp.data.network.datasource.QuoteNetworkDataSource
 import com.catnip.quoteapp.data.network.model.response.QuoteResponse
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -23,18 +21,17 @@ class QuoteRepositoryImpl(
     val networkDataSource: QuoteNetworkDataSource
 ) : BaseRepositoryImpl(), QuoteRepository {
 
-    override fun getRandomQuote(dispatcher: CoroutineDispatcher): Flow<DataResource<QuoteResponse>> =
+    override suspend fun getRandomQuote(): Flow<DataResource<QuoteResponse>> =
         flow {
             emit(safeNetworkCall { networkDataSource.getRandomQuote() })
-        }.flowOn(dispatcher)
+        }
 
-    override fun getFavoriteQuotes(dispatcher: CoroutineDispatcher): Flow<DataResource<List<QuoteEntity>>> =
+    override suspend fun getFavoriteQuotes(): Flow<DataResource<List<QuoteEntity>>> =
         flow {
             emit(proceed { localDataSource.getFavoriteQuotes() })
-        }.flowOn(dispatcher)
+        }
 
-    override fun addFavoriteQuote(
-        dispatcher: CoroutineDispatcher,
+    override suspend fun addFavoriteQuote(
         entity: QuoteEntity
     ): Flow<DataResource<Long>> =
         flow {
@@ -50,18 +47,16 @@ class QuoteRepositoryImpl(
                     DataResource.Error(exception)
                 }
             )
-        }.flowOn(dispatcher)
+        }
 
     override suspend fun getFavoriteQuotesById(
-        dispatcher: CoroutineDispatcher,
         id: String?
     ): Flow<DataResource<QuoteEntity?>> =
         flow {
             emit(proceed { localDataSource.getFavoriteQuotesById(id) })
-        }.flowOn(dispatcher)
+        }
 
-    override fun deleteFavoriteQuote(
-        dispatcher: CoroutineDispatcher,
+    override suspend fun deleteFavoriteQuote(
         entity: QuoteEntity
     ): Flow<DataResource<Int>> =
         flow {
@@ -78,25 +73,25 @@ class QuoteRepositoryImpl(
                 }
             )
         }
-            .flowOn(dispatcher)
 
 }
 
 interface QuoteRepository : BaseContract.BaseRepository {
-    fun getRandomQuote(dispatcher: CoroutineDispatcher): Flow<DataResource<QuoteResponse>>
-    fun getFavoriteQuotes(dispatcher: CoroutineDispatcher): Flow<DataResource<List<QuoteEntity>>>
-    fun addFavoriteQuote(
-        dispatcher: CoroutineDispatcher,
+    suspend fun getRandomQuote():
+            Flow<DataResource<QuoteResponse>>
+
+    suspend fun getFavoriteQuotes():
+            Flow<DataResource<List<QuoteEntity>>>
+
+    suspend fun addFavoriteQuote(
         entity: QuoteEntity
     ): Flow<DataResource<Long>>
 
     suspend fun getFavoriteQuotesById(
-        dispatcher: CoroutineDispatcher,
         id: String?
     ): Flow<DataResource<QuoteEntity?>>
 
-    fun deleteFavoriteQuote(
-        dispatcher: CoroutineDispatcher,
+    suspend fun deleteFavoriteQuote(
         entity: QuoteEntity
     ): Flow<DataResource<Int>>
 }

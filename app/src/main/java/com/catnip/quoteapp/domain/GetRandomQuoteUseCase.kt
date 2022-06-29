@@ -7,7 +7,6 @@ import com.catnip.quoteapp.data.repository.QuoteRepository
 import com.catnip.quoteapp.ui.viewparam.Quote
 import com.catnip.quoteapp.ui.viewparam.mapToViewParam
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 
 /**
@@ -20,15 +19,17 @@ class GetRandomQuoteUseCase(
 ) : BaseUseCase<Any, Quote>(dispatcher) {
 
     override suspend fun execute(param: Any?): Flow<ViewResource<Quote>> {
-        return repository.getRandomQuote(dispatcher).map { resultNetwork ->
+        return repository.getRandomQuote().map { resultNetwork ->
             when (resultNetwork) {
                 is DataResource.Success -> {
-                    repository.getFavoriteQuotesById(dispatcher, resultNetwork.data?.id)
+                    repository.getFavoriteQuotesById(resultNetwork.data?.id)
                         .map { favResult ->
                             when (favResult) {
                                 is DataResource.Success -> {
                                     if (favResult.data != null) {
-                                        ViewResource.Success(resultNetwork.data.mapToViewParam().apply { isFavorite = true })
+                                        ViewResource.Success(
+                                            resultNetwork.data.mapToViewParam()
+                                                .apply { isFavorite = true })
                                     } else {
                                         ViewResource.Success(resultNetwork.data.mapToViewParam())
                                     }

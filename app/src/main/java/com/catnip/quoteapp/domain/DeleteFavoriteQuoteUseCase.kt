@@ -1,13 +1,10 @@
 package com.catnip.quoteapp.domain
 
-import android.view.View
 import com.catnip.quoteapp.base.arch.BaseUseCase
-import com.catnip.quoteapp.base.exception.DatabaseExecutionFailedException
 import com.catnip.quoteapp.base.wrapper.DataResource
 import com.catnip.quoteapp.base.wrapper.ViewResource
 import com.catnip.quoteapp.data.repository.QuoteRepository
 import com.catnip.quoteapp.ui.viewparam.Quote
-import com.catnip.quoteapp.ui.viewparam.mapToViewParams
 import com.catnip.quoteapp.ui.viewparam.toEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +21,7 @@ class DeleteFavoriteQuoteUseCase(
 ) : BaseUseCase<DeleteFavoriteQuoteUseCase.Param, Pair<Quote?, Int>>(dispatcher) {
 
     override suspend fun execute(param: Param?): Flow<ViewResource<Pair<Quote?, Int>>> {
-        return repository.deleteFavoriteQuote(dispatcher, param?.quote.toEntity()).map {
+        return repository.deleteFavoriteQuote(param?.quote.toEntity()).map {
             when (it) {
                 is DataResource.Success -> {
                     ViewResource.Success(

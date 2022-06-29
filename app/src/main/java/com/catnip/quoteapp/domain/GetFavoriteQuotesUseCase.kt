@@ -21,12 +21,12 @@ class GetFavoriteQuotesUseCase(
 ) : BaseUseCase<Any, MutableList<Quote>>(dispatcher) {
 
     override suspend fun execute(param: Any?): Flow<ViewResource<MutableList<Quote>>> {
-        return repository.getFavoriteQuotes(dispatcher).map {
+        return repository.getFavoriteQuotes().map {
             when (it) {
                 is DataResource.Success -> {
-                    if(it.data?.isEmpty() == true){
+                    if (it.data?.isEmpty() == true) {
                         ViewResource.Empty()
-                    }else{
+                    } else {
                         ViewResource.Success(it.data.mapToViewParams())
                     }
                 }
