@@ -22,7 +22,7 @@ abstract class QuoteDatabase : RoomDatabase() {
                 context.applicationContext,
                 QuoteDatabase::class.java,
                 DB_NAME
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
     }
 }

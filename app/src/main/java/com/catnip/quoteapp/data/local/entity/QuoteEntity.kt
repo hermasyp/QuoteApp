@@ -21,5 +21,7 @@ data class QuoteEntity(
     @ColumnInfo
     val dateModified: String?,
     @ColumnInfo
-    val length: Int?
+    val length: Int?,
+    @ColumnInfo
+    val isFavorite: Boolean?
 )

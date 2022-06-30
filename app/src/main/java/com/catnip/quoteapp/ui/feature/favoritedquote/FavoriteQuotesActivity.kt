@@ -22,6 +22,10 @@ class FavoriteQuotesActivity : BaseActivity<ActivityFavoriteQuotesBinding, Favor
 
     private lateinit var adapter: FavoriteQuotesAdapter
 
+    companion object {
+        const val EXTRAS_QUOTE = "EXTRAS_QUOTE"
+    }
+
 
     override fun observeData() {
         super.observeData()
@@ -81,6 +85,8 @@ class FavoriteQuotesActivity : BaseActivity<ActivityFavoriteQuotesBinding, Favor
     private fun initList() {
         adapter = FavoriteQuotesAdapter {
             //on item clicked
+            setResult(RESULT_OK, intent.putExtra(EXTRAS_QUOTE, it))
+            finish()
         }
         binding.rvFavoriteQuotes.apply {
             this.adapter = this@FavoriteQuotesActivity.adapter

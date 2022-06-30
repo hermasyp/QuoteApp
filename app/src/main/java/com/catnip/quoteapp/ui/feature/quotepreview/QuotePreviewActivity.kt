@@ -4,20 +4,24 @@ import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.catnip.quoteapp.base.arch.BaseActivity
 import com.catnip.quoteapp.R
+import com.catnip.quoteapp.base.arch.BaseActivity
 import com.catnip.quoteapp.base.wrapper.ViewResource
 import com.catnip.quoteapp.databinding.ActivityQuotePreviewBinding
 import com.catnip.quoteapp.ui.feature.favoritedquote.FavoriteQuotesActivity
 import com.catnip.quoteapp.ui.viewparam.Quote
-import com.catnip.quoteapp.utils.createCircleBackground
+import com.catnip.quoteapp.utils.IntentUtils
+import com.catnip.quoteapp.utils.bitmapToCacheUri
 import com.catnip.quoteapp.utils.createRoundedBackground
+import com.catnip.quoteapp.utils.toImageBitmap
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePreviewViewModel>(
     ActivityQuotePreviewBinding::inflate
@@ -25,10 +29,21 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
 
     override val viewModel: QuotePreviewViewModel by viewModel()
 
+    private var favoriteActivityResult =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val intent: Intent? = result.data
+                val quote =
+                    intent?.extras?.getParcelable<Quote>(FavoriteQuotesActivity.EXTRAS_QUOTE)
+                showData(quote)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableHomeAsBack()
         super.onCreate(savedInstanceState)
     }
+
     override fun initView() {
         enableHomeAsBack()
         setClickListeners()
@@ -37,7 +52,12 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
 
     private fun setClickListeners() {
         binding.ivFavoriteList.setOnClickListener {
-            startActivity(Intent(this,FavoriteQuotesActivity::class.java))
+            favoriteActivityResult.launch(Intent(this, FavoriteQuotesActivity::class.java))
+        }
+        binding.btnShareQuotes.setOnClickListener {
+            val bitmap = binding.clQuoteContainer.toImageBitmap()
+            val bitmapUri = bitmap.bitmapToCacheUri(this)
+            bitmapUri?.let { uri -> IntentUtils.shareImage(this, uri) }
         }
         binding.btnRefreshQuotes.setOnClickListener { viewModel.getRandomQuote() }
         binding.btnFavoriteQuotes.setOnClickListener {
@@ -49,7 +69,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
                 }
             }
         }
-        binding.btnChangeQuotesColor.setOnClickListener {
+        binding.clQuoteContainer.setOnClickListener {
             showColorPickerDialog()
         }
     }
@@ -74,7 +94,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
         viewModel.removeFavoriteResult.observe(this) {
             when (it) {
                 is ViewResource.Success -> {
-                    showData(it.data)
+                    showData(it.data?.first)
                 }
                 is ViewResource.Error -> {
                     Toast.makeText(this, "Remove Favorite Failed", Toast.LENGTH_SHORT).show()
@@ -110,6 +130,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
             .show()
     }
 
+
     override fun <T> showData(data: T) {
         if (data is Quote) {
             viewModel.currentQuote = data
@@ -126,8 +147,6 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
     }
 
     private fun setBackgroundCardColor(hexColor: String) {
-        binding.ivColorPreview.background =
-            GradientDrawable().createCircleBackground(this, hexColor)
         binding.clQuoteContainer.background =
             GradientDrawable().createRoundedBackground(this, hexColor, 16)
     }

@@ -21,10 +21,11 @@ class AddFavoriteQuoteUseCase(
 ) : BaseUseCase<Quote, Quote?>(dispatcher) {
 
     override suspend fun execute(param: Quote?): Flow<ViewResource<Quote?>> {
-        return repository.addFavoriteQuote(param.toEntity()).map {
+        val quote = param?.apply { isFavorite = true }
+        return repository.addFavoriteQuote(quote.toEntity()).map {
             when (it) {
                 is DataResource.Success -> {
-                    ViewResource.Success(param?.apply { isFavorite = true })
+                    ViewResource.Success(quote)
                 }
 
                 is DataResource.Error -> {

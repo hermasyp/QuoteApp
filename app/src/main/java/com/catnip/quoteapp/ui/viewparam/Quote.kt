@@ -1,13 +1,16 @@
 package com.catnip.quoteapp.ui.viewparam
 
+import android.os.Parcelable
 import com.catnip.quoteapp.data.local.entity.QuoteEntity
 import com.catnip.quoteapp.data.network.model.response.QuoteResponse
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
 Github : https://github.com/hermasyp
  **/
+@Parcelize
 data class Quote(
     val author: String,
     val authorSlug: String,
@@ -17,7 +20,7 @@ data class Quote(
     val id: String,
     val length: Int,
     var isFavorite: Boolean = false
-)
+) : Parcelable
 
 fun Quote?.toEntity() = QuoteEntity(
     id = this?.id.orEmpty(),
@@ -27,6 +30,7 @@ fun Quote?.toEntity() = QuoteEntity(
     dateAdded = this?.dateAdded,
     dateModified = this?.dateModified,
     length = this?.length,
+    isFavorite = this?.isFavorite,
 )
 
 fun QuoteEntity?.mapToViewParam() = Quote(
@@ -37,6 +41,7 @@ fun QuoteEntity?.mapToViewParam() = Quote(
     dateAdded = this?.dateAdded.orEmpty(),
     dateModified = this?.dateModified.orEmpty(),
     length = this?.length ?: 0,
+    isFavorite = this?.isFavorite ?: false
 )
 
 fun List<QuoteEntity>?.mapToViewParams() = mutableListOf<Quote>().apply {
