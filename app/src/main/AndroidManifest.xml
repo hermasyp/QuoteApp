@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.QuoteApp"
         tools:targetApi="31">
+<!--
         <activity
             android:label="@string/title_favorite_page"
             android:name=".ui.feature.favoritedquote.FavoriteQuotesActivity"
@@ -31,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
