@@ -22,23 +22,22 @@ class GetRandomQuoteUseCase(
         return repository.getRandomQuote().map { resultNetwork ->
             when (resultNetwork) {
                 is DataResource.Success -> {
-                    repository.getFavoriteQuotesById(resultNetwork.data?.id)
-                        .map { favResult ->
-                            when (favResult) {
-                                is DataResource.Success -> {
-                                    if (favResult.data != null) {
-                                        ViewResource.Success(
-                                            resultNetwork.data.mapToViewParam()
-                                                .apply { isFavorite = true })
-                                    } else {
-                                        ViewResource.Success(resultNetwork.data.mapToViewParam())
-                                    }
-                                }
-                                else -> {
-                                    ViewResource.Error(favResult.exception)
+                    repository.getFavoriteQuotesById(resultNetwork.data?.id).map { favResult ->
+                        when (favResult) {
+                            is DataResource.Success -> {
+                                if (favResult.data != null) {
+                                    ViewResource.Success(
+                                        resultNetwork.data.mapToViewParam()
+                                            .apply { isFavorite = true })
+                                } else {
+                                    ViewResource.Success(resultNetwork.data.mapToViewParam())
                                 }
                             }
-                        }.last()
+                            else -> {
+                                ViewResource.Error(favResult.exception)
+                            }
+                        }
+                    }.last()
                 }
                 is DataResource.Error -> {
                     ViewResource.Error(resultNetwork.exception)

@@ -84,7 +84,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
                     showData(it.data)
                 }
                 is ViewResource.Error -> {
-                    Toast.makeText(this, "Add Favorite Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.text_error_add_favorite), Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     return@observe
@@ -97,7 +97,7 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
                     showData(it.data?.first)
                 }
                 is ViewResource.Error -> {
-                    Toast.makeText(this, "Remove Favorite Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.text_error_remove_favorite), Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     return@observe
