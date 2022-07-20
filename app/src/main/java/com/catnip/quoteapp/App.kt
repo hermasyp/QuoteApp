@@ -1,7 +1,8 @@
 package com.catnip.quoteapp
 
 import android.app.Application
-import com.catnip.quoteapp.di.InjectionModules
+import com.catnip.core.di.CoreModule
+import com.catnip.quoteapp.di.AppModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -16,7 +17,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(InjectionModules.getModules())
+            modules(AppModules.getModules() + CoreModule.getModules())
         }
     }
 }

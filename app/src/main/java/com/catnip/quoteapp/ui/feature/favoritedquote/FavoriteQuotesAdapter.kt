@@ -1,11 +1,10 @@
 package com.catnip.quoteapp.ui.feature.favoritedquote;
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.catnip.core.common.viewparam.Quote
 import com.catnip.quoteapp.databinding.ItemQuoteBinding
-import com.catnip.quoteapp.ui.viewparam.Quote
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas

@@ -1,15 +1,14 @@
 package com.catnip.quoteapp.ui.feature.favoritedquote
 
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.catnip.quoteapp.base.arch.BaseActivity
+import com.catnip.core.base.arch.BaseActivity
 import com.catnip.quoteapp.R
-import com.catnip.quoteapp.base.wrapper.ViewResource
+import com.catnip.core.base.wrapper.ViewResource
+import com.catnip.core.common.viewparam.Quote
 import com.catnip.quoteapp.databinding.ActivityFavoriteQuotesBinding
-import com.catnip.quoteapp.ui.viewparam.Quote
-import com.catnip.quoteapp.utils.recyclerview.RemoveItemTouchHelper
+import com.catnip.core.utils.recyclerview.RemoveItemTouchHelper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
 

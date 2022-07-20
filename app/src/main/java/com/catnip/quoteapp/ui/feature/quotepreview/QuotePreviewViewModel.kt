@@ -3,11 +3,11 @@ package com.catnip.quoteapp.ui.feature.quotepreview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catnip.quoteapp.base.wrapper.ViewResource
+import com.catnip.core.base.wrapper.ViewResource
+import com.catnip.core.common.viewparam.Quote
 import com.catnip.quoteapp.domain.AddFavoriteQuoteUseCase
 import com.catnip.quoteapp.domain.DeleteFavoriteQuoteUseCase
 import com.catnip.quoteapp.domain.GetRandomQuoteUseCase
-import com.catnip.quoteapp.ui.viewparam.Quote
 import kotlinx.coroutines.launch
 
 /**
@@ -24,7 +24,7 @@ class QuotePreviewViewModel(
 
     val addFavoriteResult = MutableLiveData<ViewResource<Quote?>>()
 
-    val removeFavoriteResult = MutableLiveData<ViewResource<Pair<Quote?,Int>>>()
+    val removeFavoriteResult = MutableLiveData<ViewResource<Pair<Quote?, Int>>>()
 
     var cardColor = "#546E7A"
 

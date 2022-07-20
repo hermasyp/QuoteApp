@@ -30,6 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    flavorDimensions "version"
+    productFlavors {
+        production {
+            dimension = 'version'
+            buildConfigField("String", "BASE_URL", "\"https://api.quotable.io/\"")
+            buildConfigField("String", "APPLICATION_ID", "\"$AndroidProjectConfig.applicationId\"")
+        }
+    }
 }
 
 dependencies {
@@ -40,4 +48,30 @@ dependencies {
     testImplementation Libraries.junit
     androidTestImplementation Libraries.androidJunit
     androidTestImplementation Libraries.espressoCore
+
+    //coroutines
+    api Libraries.coroutineCore
+    api Libraries.coroutineAndroid
+    testApi Libraries.coroutineCoroutineTest
+
+    //retrofit
+    implementation Libraries.retrofit2
+    implementation Libraries.retrofitConverterGson
+
+    //json parser library
+    implementation Libraries.gson
+
+    //room
+    implementation Libraries.roomKtx
+    kapt Libraries.kaptRoomCompiler
+
+    //koin
+    api Libraries.koinAndroid
+
+    //ui
+    api Libraries.recyclerViewSwipeDecorator
+
+    //chucker
+    debugImplementation Libraries.chucker
+    releaseImplementation Libraries.chuckerNoOp
 }

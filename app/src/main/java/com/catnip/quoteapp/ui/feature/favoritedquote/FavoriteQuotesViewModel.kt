@@ -3,11 +3,10 @@ package com.catnip.quoteapp.ui.feature.favoritedquote
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.catnip.quoteapp.base.wrapper.ViewResource
-import com.catnip.quoteapp.domain.AddFavoriteQuoteUseCase
+import com.catnip.core.base.wrapper.ViewResource
+import com.catnip.core.common.viewparam.Quote
 import com.catnip.quoteapp.domain.DeleteFavoriteQuoteUseCase
 import com.catnip.quoteapp.domain.GetFavoriteQuotesUseCase
-import com.catnip.quoteapp.ui.viewparam.Quote
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

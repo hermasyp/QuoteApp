@@ -1,13 +1,16 @@
 package com.catnip.quoteapp.domain
 
-import com.catnip.quoteapp.base.arch.BaseUseCase
-import com.catnip.quoteapp.base.wrapper.DataResource
-import com.catnip.quoteapp.base.wrapper.ViewResource
+import com.catnip.core.base.arch.BaseUseCase
+import com.catnip.core.base.wrapper.DataResource
+import com.catnip.core.base.wrapper.ViewResource
+import com.catnip.core.common.viewparam.Quote
+import com.catnip.core.common.viewparam.mapToViewParam
 import com.catnip.quoteapp.data.repository.QuoteRepository
-import com.catnip.quoteapp.ui.viewparam.Quote
-import com.catnip.quoteapp.ui.viewparam.mapToViewParam
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -22,22 +25,23 @@ class GetRandomQuoteUseCase(
         return repository.getRandomQuote().map { resultNetwork ->
             when (resultNetwork) {
                 is DataResource.Success -> {
-                    repository.getFavoriteQuotesById(resultNetwork.data?.id).map { favResult ->
-                        when (favResult) {
-                            is DataResource.Success -> {
-                                if (favResult.data != null) {
-                                    ViewResource.Success(
-                                        resultNetwork.data.mapToViewParam()
-                                            .apply { isFavorite = true })
-                                } else {
-                                    ViewResource.Success(resultNetwork.data.mapToViewParam())
+                    repository.getFavoriteQuotesById(resultNetwork.data?.id)
+                        .map { favResult ->
+                            when (favResult) {
+                                is DataResource.Success -> {
+                                    if (favResult.data != null) {
+                                        ViewResource.Success(
+                                            resultNetwork.data.mapToViewParam()
+                                                .apply { isFavorite = true })
+                                    } else {
+                                        ViewResource.Success(resultNetwork.data.mapToViewParam())
+                                    }
+                                }
+                                else -> {
+                                    ViewResource.Error(favResult.exception)
                                 }
                             }
-                            else -> {
-                                ViewResource.Error(favResult.exception)
-                            }
-                        }
-                    }.last()
+                        }.last()
                 }
                 is DataResource.Error -> {
                     ViewResource.Error(resultNetwork.exception)
