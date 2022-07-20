@@ -1,0 +1,10 @@
+<resources>
+    <string name="another_quotes">Another Quotes</string>
+    <string name="favorite_quotes">Set as a Favorite</string>
+    <string name="change_color">Change Color</string>
+    <string name="text_color_picker_title">Choose Card Color</string>
+    <string name="title_favorite_page">Favorited Quotes</string>
+    <string name="text_empty_list_favorite">Seems like your favorite list is empty</string>
+    <string name="text_error_remove_favorite">Remove Favorite Failed</string>
+    <string name="text_error_add_favorite">Add Favorite Failed</string>
+</resources>

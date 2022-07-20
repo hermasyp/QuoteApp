@@ -49,6 +49,9 @@ dependencies {
     implementation Libraries.lifecycleRuntimeKtx
     implementation Libraries.lifecycleLiveDataKtx
 
+    //color picker
+    implementation Libraries.colorPicker
+
     //core module
     implementation project(":core")
 }

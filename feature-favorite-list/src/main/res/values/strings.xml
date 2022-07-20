@@ -1,0 +1,5 @@
+<resources>
+    <string name="text_empty_list_favorite">Seems like your favorite list is empty</string>
+    <string name="text_error_remove_favorite">Remove Favorite Failed</string>
+    <string name="text_error_add_favorite">Add Favorite Failed</string>
+</resources>

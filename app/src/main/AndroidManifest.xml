@@ -19,18 +19,8 @@
         tools:targetApi="31">
         <activity
             android:label="@string/title_favorite_page"
-            android:name=".ui.feature.favoritedquote.FavoriteQuotesActivity"
+            android:name="com.catnip.favoritelist.ui.FavoriteQuotesActivity"
             android:exported="false" />
-        <activity
-            android:theme="@style/Theme.QuoteApp.NoToolbar"
-            android:name=".ui.feature.quotepreview.QuotePreviewActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

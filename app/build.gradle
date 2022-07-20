@@ -58,11 +58,12 @@ dependencies {
     //color picker
     implementation Libraries.colorPicker
 
-
-
     //core module
     implementation project(":core")
 
+    //feature module
+    implementation project(":feature-preview-quote")
+    implementation project(":feature-favorite-list")
 
 
 }

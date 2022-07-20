@@ -2,7 +2,9 @@ package com.catnip.quoteapp
 
 import android.app.Application
 import com.catnip.core.di.CoreModule
+import com.catnip.favoritelist.di.FavoriteQuotesModule
 import com.catnip.quoteapp.di.AppModules
+import com.catnip.quotepreview.di.QuotePreviewModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +19,12 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(AppModules.getModules() + CoreModule.getModules())
+            modules(
+                AppModules.getModules()
+                        + CoreModule.getModules()
+                        + FavoriteQuotesModule.getModules()
+                        + QuotePreviewModule.getModules()
+            )
         }
     }
 }
