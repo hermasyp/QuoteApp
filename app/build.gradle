@@ -60,9 +60,9 @@ dependencies {
 
     //core module
     implementation project(":core")
+    implementation project(':feature-quote-preview')
 
     //feature module
-    implementation project(":feature-preview-quote")
     implementation project(":feature-favorite-list")
 
 

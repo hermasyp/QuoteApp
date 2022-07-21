@@ -1,14 +1,17 @@
 package com.catnip.quotepreview.ui
 
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.catnip.core.base.arch.BaseActivity
 import com.catnip.core.base.wrapper.ViewResource
 import com.catnip.core.common.viewparam.Quote
+import com.catnip.core.navigator.NoArgs
 import com.catnip.core.utils.IntentUtils
 import com.catnip.core.utils.bitmapToCacheUri
 import com.catnip.core.utils.createRoundedBackground
@@ -25,17 +28,10 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
     ActivityQuotePreviewBinding::inflate
 ) {
 
+    private lateinit var favoriteListContract: ActivityResultLauncher<NoArgs?>
+
     override val viewModel: QuotePreviewViewModel by viewModel()
 
-    private var favoriteActivityResult =
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-/*                val intent: Intent? = result.data
-                val quote =
-                    intent?.extras?.getParcelable<Quote>(FavoriteQuotesActivity.EXTRAS_QUOTE)
-                showData(quote)*/
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableHomeAsBack()
@@ -46,11 +42,15 @@ class QuotePreviewActivity : BaseActivity<ActivityQuotePreviewBinding, QuotePrev
         enableHomeAsBack()
         setClickListeners()
         viewModel.getRandomQuote()
+        favoriteListContract =
+            registerForActivityResult(activityNavigator.favoriteQuotesNavigator()) { result ->
+                showData(result?.quote)
+            }
     }
 
     private fun setClickListeners() {
         binding.ivFavoriteList.setOnClickListener {
-            //favoriteActivityResult.launch(Intent(this, FavoriteQuotesActivity::class.java))
+            favoriteListContract.launch(NoArgs())
         }
         binding.btnShareQuotes.setOnClickListener {
             val bitmap = binding.clQuoteContainer.toImageBitmap()

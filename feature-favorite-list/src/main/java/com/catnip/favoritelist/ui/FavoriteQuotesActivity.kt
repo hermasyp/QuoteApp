@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.catnip.core.base.arch.BaseActivity
 import com.catnip.core.base.wrapper.ViewResource
 import com.catnip.core.common.viewparam.Quote
+import com.catnip.core.navigator.activity.FavoriteQuotesNavigator
 import com.catnip.core.utils.recyclerview.RemoveItemTouchHelper
 import com.catnip.favoritelist.R
 import com.catnip.favoritelist.databinding.ActivityFavoriteQuotesBinding
@@ -19,11 +20,6 @@ class FavoriteQuotesActivity : BaseActivity<ActivityFavoriteQuotesBinding, Favor
     override val viewModel: FavoriteQuotesViewModel by viewModel()
 
     private lateinit var adapter: FavoriteQuotesAdapter
-
-    companion object {
-        const val EXTRAS_QUOTE = "EXTRAS_QUOTE"
-    }
-
 
     override fun observeData() {
         super.observeData()
@@ -83,7 +79,10 @@ class FavoriteQuotesActivity : BaseActivity<ActivityFavoriteQuotesBinding, Favor
     private fun initList() {
         adapter = FavoriteQuotesAdapter {
             //on item clicked
-            setResult(RESULT_OK, intent.putExtra(EXTRAS_QUOTE, it))
+            setContractResult(
+                activityNavigator.favoriteQuotesNavigator(),
+                FavoriteQuotesNavigator.Result(it)
+            )
             finish()
         }
         binding.rvFavoriteQuotes.apply {

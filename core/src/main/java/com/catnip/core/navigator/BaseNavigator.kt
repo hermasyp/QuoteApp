@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContract
 import kotlinx.parcelize.Parcelize
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -43,6 +45,18 @@ abstract class BaseNavigator<Args : Parcelable, Result : Parcelable>(private val
     fun createResultIntent(result: Result): Intent {
         return Intent().apply {
             putExtra(INTENT_RESULT, result)
+        }
+    }
+}
+
+inline fun <reified Args : Parcelable> Activity.contractArgs(crossinline lazyContract: () -> BaseNavigator<Args, *>): ReadOnlyProperty<Activity, Args> {
+    return object : ReadOnlyProperty<Any, Args> {
+        private var value: Args? = null
+        override fun getValue(thisRef: Any, property: KProperty<*>): Args {
+            if (value == null) {
+                value = lazyContract().parseStartIntent(intent)
+            }
+            return value ?: throw RuntimeException("Missing contract args")
         }
     }
 }

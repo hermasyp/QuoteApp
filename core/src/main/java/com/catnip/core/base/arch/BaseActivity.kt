@@ -1,6 +1,8 @@
 package com.catnip.core.base.arch
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,10 @@ import com.catnip.core.R
 import com.catnip.core.base.exception.ApiErrorException
 import com.catnip.core.base.exception.NoInternetConnectionException
 import com.catnip.core.base.wrapper.ViewResource
+import com.catnip.core.navigator.ActivityNavigatorContract
+import com.catnip.core.navigator.BaseNavigator
+import com.catnip.core.navigator.NoResult
+import org.koin.android.ext.android.inject
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
@@ -18,6 +24,8 @@ Github : https://github.com/hermasyp
 abstract class BaseActivity<B : ViewBinding, VM : ViewModel>(
     val bindingFactory: (LayoutInflater) -> B
 ) : AppCompatActivity(), BaseContract.BaseView {
+
+    protected val activityNavigator: ActivityNavigatorContract by inject()
 
     protected lateinit var binding: B
 
@@ -112,4 +120,14 @@ abstract class BaseActivity<B : ViewBinding, VM : ViewModel>(
         return super.onSupportNavigateUp()
     }
 
+    fun <Args : Parcelable> BaseNavigator<Args, NoResult>.launch(args: Args? = null) {
+        startActivity(this.createIntent(this@BaseActivity, args))
+    }
+
+    fun <Result : Parcelable> setContractResult(
+        contract: BaseNavigator<*, Result>,
+        result: Result
+    ) {
+        setResult(Activity.RESULT_OK, contract.createResultIntent(result))
+    }
 }

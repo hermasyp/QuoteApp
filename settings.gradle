@@ -17,4 +17,4 @@ rootProject.name = "QuoteApp"
 include ':app'
 include ':core'
 include ':feature-favorite-list'
-include ':feature-preview-quote'
+include ':feature-quote-preview'
